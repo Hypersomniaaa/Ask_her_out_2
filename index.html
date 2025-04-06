@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Date Proposal</title>
+  <link rel="stylesheet" href="./style/css/styles.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(to bottom right, #ffe5ec, #fff1f5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      transform: scale(0.9); /* Zoomed out */
+      transform-origin: center;
+      height: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .header_text {
+      font-size: 2.8rem;
+      font-weight: bold;
+      color: #e91e63;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px #ffcdd2;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    h5 {
+      font-size: 1.4rem;
+      color: #6c757d;
+      margin-bottom: 25px;
+      font-weight: normal;
+    }
+
+    .gif_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      margin-left: 30px;
+    }
+
+    .gif_container img {
+      width: 320px;
+      max-width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      transition: all 0.5s ease;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #yesButton {
+      background-color: #ff6f91;
+      color: white;
+    }
+
+    #noButton {
+      background-color: #f06292;
+      color: white;
+      z-index: 2;
+    }
+
+    #yesButton:hover {
+      background-color: #e91e63;
+    }
+
+    #noButton:hover {
+      background-color: #ec407a;
+    }
+
+    .center-yes {
+      margin: 0 auto;
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .envelope-container {
+  position: fixed;
+  bottom: 70px; /* was 20px */
+  right: 120px;
+  text-align: center;
+  z-index: 100;
+}
+
+
+    .caption {
+      font-size: 0.9rem;
+      color: #e91e63;
+      font-weight: bold;
+      margin-bottom: 5px;
+      animation: pulse 2s infinite;
+    }
+
+    .envelope {
+      position: relative;
+      width: 60px;
+      height: 40px;
+      cursor: pointer;
+      display: inline-block;
+      perspective: 600px;
+    }
+
+    .envelope-body {
+      width: 100%;
+      height: 100%;
+      background-color: #f8bbd0;
+      border-radius: 5px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .envelope-flap {
+      width: 0;
+      height: 0;
+      border-left: 30px solid transparent;
+      border-right: 30px solid transparent;
+      border-bottom: 20px solid #f48fb1;
+      position: absolute;
+      top: -20px;
+      left: 0;
+      z-index: 2;
+      transform-origin: bottom center;
+      transform: rotateX(160deg);
+      transition: transform 0.4s ease;
+    }
+
+    .envelope:hover .envelope-flap {
+      transform: rotateX(0deg);
+    }
+
+    .message-popup {
+      position: absolute;
+      bottom: 60px;
+      right: -80px;
+      background-color: #fff0f6;
+      border: 1px solid #f8bbd0;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.9rem;
+      color: #880e4f;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
+      width: 200px;
+      text-align: left;
+      z-index: 0;
+    }
+
+    .envelope:hover .message-popup {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .sparkle {
+      position: absolute;
+      top: -18px;
+      right: -10px;
+      font-size: 1.3rem;
+      color: #ffd700;
+      opacity: 0;
+      animation: sparkleAnim 2s infinite;
+      pointer-events: none;
+    }
+
+    .envelope:hover .sparkle {
+      opacity: 1;
+    }
+
+    @keyframes sparkleAnim {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+      50% { transform: scale(1.3) rotate(30deg); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.6; transform: scale(1); }
+    }
+
+    .petal, .emoji {
+      position: fixed;
+      top: -10px;
+      font-size: 1.4rem;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive fix */
+    @media (max-width: 600px) {
+      .container {
+        transform: scale(0.85);
+        padding: 10px;
+      }
+
+      .header_text {
+        font-size: 2.2rem;
+      }
+
+      h5 {
+        font-size: 1.2rem;
+      }
+
+      .gif_container img {
+        width: 250px;
+      }
+
+      .envelope-container {
+        right: 20px;
+      }
+
+      .message-popup {
+        right: -60px;
+        width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="header_text">Hi Queen! 💖<br />Will You Go Out On A Date With Me?</h1>
+    <h5>This coming Tuesday (April 8) — just us two ✨</h5>
+
+    <div class="gif_container">
+      <img src="3.gif" alt="Cute animated illustration" />
+    </div>
+
+    <div class="buttons" id="buttonContainer">
+      <button class="btn" id="yesButton" onclick="nextPage()">Yes 💕</button>
+      <button class="btn" id="noButton" onclick="shrinkNoGrowYes()">No 😢</button>
+    </div>
+  </div>
+
+  <div class="envelope-container">
+    <p class="caption">open me 💌</p>
+    <div class="envelope">
+      <div class="envelope-flap"></div>
+      <div class="envelope-body"></div>
+      <div class="sparkle">&#10024;</div>
+      <div class="message-popup">
+        Hi there Queen! 💖<br>
+        I just wanted to say how much you mean to me.<br>
+        I'm really excited to spend more time together 💕
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let clickCount = 0;
+    const maxClicks = 15;
+
+    function nextPage() {
+      window.location.href = "yes.html";
+    }
+
+    function shrinkNoGrowYes() {
+      const yesBtn = document.getElementById("yesButton");
+      const noBtn = document.getElementById("noButton");
+      const buttonContainer = document.getElementById("buttonContainer");
+
+      for (let i = 0; i < 5; i++) {
+        createFallingEmoji();
+      }
+
+      if (clickCount < maxClicks) {
+        clickCount++;
+
+        const yesScale = 1 + clickCount * 0.05;
+        const noScale = 1 - clickCount * 0.05;
+        const noOpacity = 1 - clickCount / maxClicks;
+
+        yesBtn.style.transform = `scale(${yesScale})`;
+        noBtn.style.transform = `scale(${noScale})`;
+        noBtn.style.opacity = noOpacity;
+      }
+
+      if (clickCount >= maxClicks) {
+        noBtn.style.display = "none";
+        buttonContainer.style.justifyContent = "center";
+        yesBtn.classList.add("center-yes");
+      }
+    }
+
+    function createFallingEmoji() {
+      const emojiList = ['😭', '💔', '😢', '😿', '🥺'];
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.innerText = emojiList[Math.floor(Math.random() * emojiList.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(emoji);
+
+      setTimeout(() => emoji.remove(), 5000);
+    }
+
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.innerText = '🌸';
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(petal);
+
+      setTimeout(() => petal.remove(), 5000);
+    }
+
+    setInterval(createPetal, 300);
+  </script>
+</body>
+</html>
